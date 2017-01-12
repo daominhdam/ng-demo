@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SearchService } from './shared/index';
+import { AuthPortComponent } from 'angular-stormpath';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,6 @@ import { SearchService } from './shared/index';
   styleUrls: ['./app.component.css'],
   viewProviders: [SearchService]
 })
-export class AppComponent {
+export class AppComponent extends AuthPortComponent {
   title = 'app works!';
 }

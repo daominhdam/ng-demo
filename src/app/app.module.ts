@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { EditComponent } from './edit/edit.component';
 import { Routes, RouterModule } from '@angular/router';
+import { StormpathModule } from 'angular-stormpath';
 
 const appRoutes: Routes = [
   { path: 'search', component: SearchComponent },
@@ -24,7 +25,8 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    StormpathModule
   ],
   providers: [],
   bootstrap: [AppComponent]

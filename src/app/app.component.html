@@ -2,5 +2,17 @@
   {{title}}
 </h1>
 
+<sp-authport></sp-authport>
+
+<div *ngIf="(user$ | async)" class="row text-center">
+  <h2 class="">
+    Welcome, ({{ ( user$ | async ).fullName }}).
+  </h2>
+  <ul class="nav nav-pills nav-stacked text-centered">
+    <li role="presentation" (click)="logout(); return"><a href="#">Logout</a></li>
+  </ul>
+</div>
 <!-- Routed views go here -->
+<div [hidden]="!(user$ | async)">
 <router-outlet></router-outlet>
+</div>
