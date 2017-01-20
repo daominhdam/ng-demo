@@ -1419,6 +1419,111 @@ A completed project with this code in it is available on GitHub at https://githu
 
 == Summary
 
-I hope you've enjoyed this in-depth tutorial on how to get started with Angular and Angular CLI. Angular CLI
-takes much of the pain out of setting up an Angular project and using Typescript. I expect great things from Angular CLI,
-mostly because the Angular setup process can be tedious and CLI greatly simplifies things.
+I hope you've enjoyed this in-depth tutorial on how to get started with Angular and Angular CLI. Angular CLI takes much of the pain out of setting up an Angular project and using Typescript. I expect great things from Angular CLI, mostly because the Angular setup process can be tedious and CLI greatly simplifies things.
+
+== Bonus: Stormpath
+
+To integrate https://stormpath.com[Stormpath] for user authentication, you'll first need to https://api.stormpath.com/register[register] and download an API key.
+
+.Stormpath Setup
+****
+The https://docs.stormpath.com/java/spring-boot-web/quickstart.html[Stormpath Spring Boot Quickstart] shows how to create a Stormpath account and download an API key; here’s the abridged version:
+
+. Signup for a free Stormpath developer account at https://api.stormpath.com/register.
+. From the Home tab of the Admin Console select Manage API Keys under the Developer Tools heading.
+. Click the Create API Key button to trigger the download of an apiKey-{API_KEY}.properties file.
+. Move the file to `~/.stormpath/apiKey.properties`.
+****
+
+Install the https://github.com/stormpath/stormpath-sdk-angular[Angular components for Stormpath] using npm.
+
+[source]
+----
+npm install --save angular-stormpath
+----
+
+Modify `app.module.ts` to import `StormpathModule` and configure your app to use https://docs.stormpath.com/client-api/product-guide/latest/[Stormpath's Client API].
+
+[source,js]
+.src/app/app.module.ts
+----
+import { StormpathModule, StormpathConfiguration } from 'angular-stormpath';
+...
+
+export function stormpathConfig(): StormpathConfiguration {
+  let spConfig: StormpathConfiguration = new StormpathConfiguration();
+  spConfig.endpointPrefix = 'https://{DNS-LABEL].apps.stormpath.io';
+  return spConfig;
+}
+
+@NgModule({
+  ...
+  imports: [
+    ...
+    StormpathModule
+  ],
+  providers: [{
+    provide: StormpathConfiguration, useFactory: stormpathConfig
+  }],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+----
+
+Change `app.component.ts` to extend `AuthPortComponent`.
+
+[source,js]
+----
+import { AuthPortComponent } from 'angular-stormpath';
+
+...
+export class AppComponent extends AuthPortComponent {
+...
+----
+
+Update `app.component.html` to use the `<sp-authport>` component and hide views if the user is not authenticated.
+
+[source,html]
+.src/app/app.component.html
+----
+<h1>{{title}}</h1>
+<sp-authport></sp-authport>
+
+<div *ngIf="(user$ | async)" class="row text-center">
+  <h2 class="">
+    Welcome, {{ ( user$ | async ).fullName }}.
+  </h2>
+  <ul class="nav nav-pills nav-stacked text-centered">
+    <li role="presentation" (click)="logout(); false"><a href="#">Logout</a></li>
+  </ul>
+</div>
+<!-- Routed views go here -->
+<div [hidden]="!(user$ | async)">
+<router-outlet></router-outlet>
+</div>
+----
+
+The Stormpath components use Bootstrap CSS classes by default. Add a reference to Bootstrap's CSS in the `<head>` of `index.html`.
+
+[source,html]
+.src/index.html
+----
+<head>
+  ...
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+----
+
+After making these changes, you should be able to run `ng serve` and login (or register) with one of your user's that's configured in Stormpath.
+
+[[stormpath-login]]
+.Stormpath login
+image::src/assets/images/stormpath-login.png[Stormpath login, 800, scaledwidth="100%"]
+
+After logging in, you'll be able to search and see the user's information.
+
+[[stormpath-post-login]]
+.View after login
+image::src/assets/images/stormpath-post-login.png[View after login, 800, scaledwidth="100%"]
+
+If it works - congrats! If it doesn't, let us know in our https://talkstormpath.slack.com[Talk Stormpath] Slack channel, or hit me up https://twitter.com/mraible[on Twitter].
