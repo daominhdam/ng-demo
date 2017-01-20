@@ -1437,10 +1437,11 @@ The https://docs.stormpath.com/java/spring-boot-web/quickstart.html[Stormpath Sp
 
 Install the https://github.com/stormpath/stormpath-sdk-angular[Angular components for Stormpath] using npm.
 
-[source]
 ----
-npm install --save angular-stormpath
+yarn add angular-stormpath
 ----
+
+NOTE: You can also use `npm install --save angular-stormpath`, but https://code.facebook.com/posts/1840075619545360[Yarn] is faster.
 
 Modify `app.module.ts` to import `StormpathModule` and configure your app to use https://docs.stormpath.com/client-api/product-guide/latest/[Stormpath's Client API].
 
