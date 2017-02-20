@@ -2,8 +2,15 @@ import { browser, by, element } from 'protractor';
 
 describe('Search', () => {
 
-  beforeEach(() => {
+  beforeAll(() => {
     browser.get('/search');
+    element(by.id('loginField')).sendKeys('matt.raible+user@stormpath.com');
+    element(by.id('passwordField')).sendKeys('Stormpath1');
+    element(by.id('loginBtn')).click();
+  });
+
+  afterAll(() => {
+    element(by.id('logout')).click();
   });
 
   it('should have an input and search button', () => {
