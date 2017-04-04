@@ -16,7 +16,7 @@ const appRoutes: Routes = [
 ];
 
 export function stormpathConfig(): StormpathConfiguration {
-  let spConfig: StormpathConfiguration = new StormpathConfiguration();
+  const spConfig: StormpathConfiguration = new StormpathConfiguration();
   spConfig.endpointPrefix = 'https://raible.apps.stormpath.io';
   return spConfig;
 }
