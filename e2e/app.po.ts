@@ -8,4 +8,8 @@ export class NgDemoPage {
   getParagraphText() {
     return element(by.css('app-root h1')).getText();
   }
+
+  paragraphTextPresent() {
+    return element(by.css('app-root h1')).isPresent();
+  }
 }
